@@ -1,29 +1,49 @@
 import React from 'react';
 import {SafeAreaView, Text, StatusBar, StyleSheet, View} from 'react-native';
+import Square from './Square';
+import GameHeader from './GameHeader';
 
 const Game = function () {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.mainView}>
-        <View style={styles.gameArea}>
-          <Text>Tic Tac Toe</Text>
+    <SafeAreaView style={styles.safeAreaView}>
+      <GameHeader />
+      <View style={styles.gameArea}>
+        <View style={styles.gameRow}>
+          <Square />
+          <Square />
+          <Square />
         </View>
-      </SafeAreaView>
-    </>
+        <View style={styles.gameRow}>
+          <Square />
+          <Square />
+          <Square />
+        </View>
+        <View style={styles.gameRow}>
+          <Square />
+          <Square />
+          <Square />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  mainView: {
-    padding: 30,
+  safeAreaView: {
     flex: 1,
-    justifyContent: 'space-between',
+    backgroundColor: '#D1DF2C',
   },
   gameArea: {
-    flex: 0.9,
     borderWidth: 4,
     borderColor: '#20232a',
+    marginHorizontal: 10,
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  gameRow: {
+    flexDirection: 'row',
   },
 });
 
