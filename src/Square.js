@@ -1,10 +1,11 @@
 import React from 'react';
-import {TouchableHighlight, StyleSheet, View, Text} from 'react-native';
+import {TouchableHighlight, StyleSheet, Text} from 'react-native';
 
-const Square = function () {
+const Square = function ({isXTurn, toggleTurnChar}) {
   const [state, setState] = React.useState({
     isPressed: false,
     isDisabled: false,
+    displayedChar: '',
   });
 
   const toggleIsPressed = (isPressed) => {
@@ -13,8 +14,11 @@ const Square = function () {
 
   const buttonClick = () => {
     if (!state.isDisabled) {
-      console.log('HELLO');
-      setState({...state, isDisabled: true});
+      console.log(isXTurn);
+      const displayedChar = toggleTurnChar();
+      console.log(displayedChar);
+
+      setState({...state, isDisabled: true, displayedChar});
     }
   };
 
@@ -31,7 +35,7 @@ const Square = function () {
       onHideUnderlay={() => toggleIsPressed(false)}
       onShowUnderlay={() => toggleIsPressed(true)}
       onPress={buttonClick}>
-      <Text> </Text>
+      <Text style={styles.char}>{state.displayedChar}</Text>
     </TouchableHighlight>
   );
 };
@@ -43,6 +47,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 10,
     margin: 2,
+    justifyContent: 'center',
   },
   touchablePress: {
     borderColor: '#8966E3',
@@ -50,9 +55,10 @@ const styles = StyleSheet.create({
   touchableNormal: {
     borderColor: '#fff',
   },
-  button: {
-    width: '100%',
-    height: '100%',
+  char: {
+    color: '#fff',
+    fontSize: 70,
+    textAlign: 'center',
   },
 });
 
