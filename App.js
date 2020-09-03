@@ -13,7 +13,8 @@ const App = function () {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-        }}>
+        }}
+        initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} options={{title: 'Home'}} />
         <Stack.Screen name="Game" component={Game} />
       </Stack.Navigator>

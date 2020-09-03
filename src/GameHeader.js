@@ -1,14 +1,23 @@
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, TouchableHighlight} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faRedo} from '@fortawesome/free-solid-svg-icons';
+import {useNavigation} from '@react-navigation/native';
 
 const GameHeader = function ({playerOne, playerTwo, isXTurn}) {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.gameHeaderView}>
-      <View style={[styles.iconView, styles.sectionView]}>
+      <TouchableHighlight
+        style={[styles.iconView, styles.sectionView]}
+        onPress={() => {
+          navigation.navigate('Home');
+        }}
+        underlayColor="#D1DF2C"
+        activeOpacity={0.9}>
         <FontAwesomeIcon size={45} color="white" icon={faHome} />
-      </View>
+      </TouchableHighlight>
       <View style={styles.sectionView}>
         <View
           style={[styles.playerCharView, isXTurn ? styles.purpleBorder : null]}>
@@ -49,7 +58,7 @@ const styles = StyleSheet.create({
   },
   playerText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 22,
     textAlign: 'center',
   },
   playerCharView: {

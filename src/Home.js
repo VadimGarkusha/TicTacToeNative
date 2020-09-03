@@ -27,6 +27,15 @@ const Home = function ({navigation}) {
     setState({...state, isNewGamePressed});
   };
 
+  const navigateToGame = () => {
+    const players = {
+      playerOneName: state.isAgainstAi ? 'Player' : 'Player 1',
+      playerTwoName: state.isAgainstAi ? 'AI' : 'Player 2',
+    };
+
+    navigation.navigate('Game', players);
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.newGameArea}>
@@ -39,7 +48,7 @@ const Home = function ({navigation}) {
           underlayColor="#fff"
           onHideUnderlay={() => toggleNewGameIsPressed(false)}
           onShowUnderlay={() => toggleNewGameIsPressed(true)}
-          onPress={() => navigation.navigate('Game')}>
+          onPress={navigateToGame}>
           <Text
             style={
               state.isNewGamePressed

@@ -3,35 +3,35 @@ import {SafeAreaView, Text, StatusBar, StyleSheet, View} from 'react-native';
 import Square from './Square';
 import GameHeader from './GameHeader';
 
-const Game = function () {
+const Game = function ({route}) {
   const [state, setState] = React.useState({
     isXTurn: true,
   });
+
+  const {playerOneName, playerTwoName} = route.params;
 
   const toggleTurnChar = () => {
     setState({...state, isXTurn: !state.isXTurn});
     return state.isXTurn ? 'X' : 'O';
   };
 
+  const isSomebodyWon = () => {};
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <GameHeader playerOne="Player" playerTwo="AI" isXTurn={state.isXTurn} />
+      <GameHeader
+        playerOne={playerOneName}
+        playerTwo={playerTwoName}
+        isXTurn={state.isXTurn}
+      />
       <View style={styles.gameArea}>
-        <View style={styles.gameRow}>
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-        </View>
-        <View style={styles.gameRow}>
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-        </View>
-        <View style={styles.gameRow}>
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-          <Square isXTurn toggleTurnChar={toggleTurnChar} />
-        </View>
+        {[...Array(3)].map((e, i) => (
+          <View style={styles.gameRow} key={i}>
+            {[...Array(3)].map((e, j) => (
+              <Square isXTurn toggleTurnChar={toggleTurnChar} key={j} />
+            ))}
+          </View>
+        ))}
       </View>
     </SafeAreaView>
   );

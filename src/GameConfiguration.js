@@ -7,8 +7,6 @@ const GameConfiguration = function ({
   isFirstOptionSelected,
   toggleOption,
 }) {
-  console.log(isFirstOptionSelected);
-
   const toggleSelectedOption = (isCallerFirstOption) => {
     if (
       !(isCallerFirstOption && isFirstOptionSelected) &&
