@@ -1,24 +1,68 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View, Button} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  TouchableHighlight,
+  Text,
+} from 'react-native';
+import GameConfiguration from './GameConfiguration';
 
-const Home = function () {
+const Home = function ({navigation}) {
   const [state, setState] = React.useState({
-    isXTurn: true,
+    isAgainstAi: true,
+    isThreeByThree: true,
+    isNewGamePressed: false,
   });
 
-  const toggleTurnChar = ({navigation}) => {
-    setState({...state, isXTurn: !state.isXTurn});
-    return state.isXTurn ? 'X' : 'O';
+  const togglePlayerSetting = () => {
+    setState({...state, isAgainstAi: !state.isAgainstAi});
+  };
+
+  const toggleFieldSize = () => {
+    setState({...state, isThreeByThree: !state.isThreeByThree});
+  };
+
+  const toggleNewGameIsPressed = (isNewGamePressed) => {
+    setState({...state, isNewGamePressed});
   };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.newGameArea}>
-        <Button
-          title="Go to Jane's profile"
-          style={styles.newGameButton}
-          onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
-        />
+        <TouchableHighlight
+          style={
+            state.isNewGamePressed
+              ? [styles.newGameButton, styles.pressedButtonText]
+              : styles.newGameButton
+          }
+          underlayColor="#fff"
+          onHideUnderlay={() => toggleNewGameIsPressed(false)}
+          onShowUnderlay={() => toggleNewGameIsPressed(true)}
+          onPress={() => navigation.navigate('Game')}>
+          <Text
+            style={
+              state.isNewGamePressed
+                ? [styles.newGameText, styles.pressedButtonText]
+                : styles.newGameText
+            }>
+            New Game
+          </Text>
+        </TouchableHighlight>
+        <View style={styles.configurationContainerView}>
+          <GameConfiguration
+            isFirstOptionSelected={state.isAgainstAi}
+            toggleOption={togglePlayerSetting}
+            optionOne="AI"
+            optionTwo="2 Players"
+          />
+          <GameConfiguration
+            isFirstOptionSelected={state.isThreeByThree}
+            toggleOption={toggleFieldSize}
+            optionOne="3X3"
+            optionTwo="4X4"
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -35,11 +79,26 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignContent: 'center',
   },
   newGameButton: {
-    width: '100%',
+    width: '90%',
     borderColor: '#fff',
     borderWidth: 2,
+    paddingVertical: 10,
+  },
+  pressedButtonText: {
+    color: '#D1DF2C',
+  },
+  newGameText: {
+    color: '#fff',
+    fontSize: 30,
+    textAlign: 'center',
+  },
+  configurationContainerView: {
+    flexDirection: 'column',
+    marginTop: 20,
+    width: '90%',
   },
 });
 
