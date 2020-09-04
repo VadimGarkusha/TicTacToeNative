@@ -2,20 +2,33 @@ import React from 'react';
 import {SafeAreaView, Text, StatusBar, StyleSheet, View} from 'react-native';
 import Square from './Square';
 import GameHeader from './GameHeader';
+import {isGameOver} from './GameUtilities';
 
 const Game = function ({route}) {
   const [state, setState] = React.useState({
     isXTurn: true,
+    playedSquares: [],
+    isGameOver: false,
   });
 
   const {playerOneName, playerTwoName} = route.params;
 
-  const toggleTurnChar = () => {
-    setState({...state, isXTurn: !state.isXTurn});
+  const toggleTurnChar = (squareId) => {
+    const newPlayedSquares = [
+      ...state.playedSquares,
+      [...squareId, state.isXTurn ? 'X' : 'O'],
+    ];
+    // console.log(newPlayedSquares);
+
+    isGameOver(newPlayedSquares);
+
+    setState({
+      ...state,
+      isXTurn: !state.isXTurn,
+      playedSquares: newPlayedSquares,
+    });
     return state.isXTurn ? 'X' : 'O';
   };
-
-  const isSomebodyWon = () => {};
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -28,7 +41,12 @@ const Game = function ({route}) {
         {[...Array(3)].map((e, i) => (
           <View style={styles.gameRow} key={i}>
             {[...Array(3)].map((e, j) => (
-              <Square isXTurn toggleTurnChar={toggleTurnChar} key={j} />
+              <Square
+                isXTurn
+                toggleTurnChar={toggleTurnChar}
+                squareId={[i, j]}
+                key={j}
+              />
             ))}
           </View>
         ))}

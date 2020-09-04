@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableHighlight, StyleSheet, Text} from 'react-native';
 
-const Square = function ({isXTurn, toggleTurnChar}) {
+const Square = function ({toggleTurnChar, squareId}) {
   const [state, setState] = React.useState({
     isPressed: false,
     isDisabled: false,
@@ -14,9 +14,7 @@ const Square = function ({isXTurn, toggleTurnChar}) {
 
   const buttonClick = () => {
     if (!state.isDisabled) {
-      console.log(isXTurn);
-      const displayedChar = toggleTurnChar();
-      console.log(displayedChar);
+      const displayedChar = toggleTurnChar(squareId);
 
       setState({...state, isDisabled: true, displayedChar});
     }
