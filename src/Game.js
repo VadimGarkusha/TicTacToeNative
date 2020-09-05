@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, Text, StatusBar, StyleSheet, View} from 'react-native';
 import Square from './Square';
 import GameHeader from './GameHeader';
-import {isGameOver} from './GameUtilities';
+import {isGameOverCheck} from './GameUtilities';
 
 const Game = function ({route}) {
   const [state, setState] = React.useState({
@@ -18,16 +18,24 @@ const Game = function ({route}) {
       ...state.playedSquares,
       [...squareId, state.isXTurn ? 'X' : 'O'],
     ];
-    // console.log(newPlayedSquares);
 
-    isGameOver(newPlayedSquares);
+    const isGameOver =
+      isGameOverCheck(newPlayedSquares) || newPlayedSquares === 9;
 
     setState({
       ...state,
       isXTurn: !state.isXTurn,
       playedSquares: newPlayedSquares,
+      isGameOver,
     });
-    return state.isXTurn ? 'X' : 'O';
+  };
+
+  const restartGame = () => {
+    setState({
+      isXTurn: true,
+      playedSquares: [],
+      isGameOver: false,
+    });
   };
 
   return (
@@ -36,6 +44,7 @@ const Game = function ({route}) {
         playerOne={playerOneName}
         playerTwo={playerTwoName}
         isXTurn={state.isXTurn}
+        restartGame={restartGame}
       />
       <View style={styles.gameArea}>
         {[...Array(3)].map((e, i) => (
@@ -44,7 +53,15 @@ const Game = function ({route}) {
               <Square
                 isXTurn
                 toggleTurnChar={toggleTurnChar}
+                displayedChar={
+                  state.playedSquares.find((s) => s[0] === i && s[1] === j)
+                    ? state.playedSquares.find(
+                        (s) => s[0] === i && s[1] === j,
+                      )[2]
+                    : ''
+                }
                 squareId={[i, j]}
+                isGameOver={state.isGameOver}
                 key={j}
               />
             ))}

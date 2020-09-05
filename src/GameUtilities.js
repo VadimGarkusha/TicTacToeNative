@@ -1,4 +1,4 @@
-export function isGameOver(playedSquares) {
+export function isGameOverCheck(playedSquares) {
   let isVerticalFilled = false,
     isHorizontalFilled = false,
     isDiagonalFilled = false;

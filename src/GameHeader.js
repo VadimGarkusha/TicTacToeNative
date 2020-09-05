@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faRedo} from '@fortawesome/free-solid-svg-icons';
 import {useNavigation} from '@react-navigation/native';
 
-const GameHeader = function ({playerOne, playerTwo, isXTurn}) {
+const GameHeader = function ({playerOne, playerTwo, isXTurn, restartGame}) {
   const navigation = useNavigation();
 
   return (
@@ -41,9 +41,13 @@ const GameHeader = function ({playerOne, playerTwo, isXTurn}) {
         </View>
         <Text style={styles.playerText}>{playerTwo}</Text>
       </View>
-      <View style={[styles.iconView, styles.sectionView]}>
+      <TouchableHighlight
+        style={[styles.iconView, styles.sectionView]}
+        onPress={restartGame}
+        underlayColor="#D1DF2C"
+        activeOpacity={0.9}>
         <FontAwesomeIcon size={41} color="white" icon={faRedo} />
-      </View>
+      </TouchableHighlight>
     </View>
   );
 };

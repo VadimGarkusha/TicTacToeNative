@@ -1,11 +1,14 @@
 import React from 'react';
 import {TouchableHighlight, StyleSheet, Text} from 'react-native';
 
-const Square = function ({toggleTurnChar, squareId}) {
+const Square = function ({
+  toggleTurnChar,
+  squareId,
+  displayedChar,
+  isGameOver,
+}) {
   const [state, setState] = React.useState({
     isPressed: false,
-    isDisabled: false,
-    displayedChar: '',
   });
 
   const toggleIsPressed = (isPressed) => {
@@ -13,27 +16,25 @@ const Square = function ({toggleTurnChar, squareId}) {
   };
 
   const buttonClick = () => {
-    if (!state.isDisabled) {
-      const displayedChar = toggleTurnChar(squareId);
-
-      setState({...state, isDisabled: true, displayedChar});
+    if (!displayedChar && !isGameOver) {
+      toggleTurnChar(squareId);
     }
   };
 
   return (
     <TouchableHighlight
       activeOpacity={0.5}
-      underlayColor={!state.isDisabled ? '#d2db63' : '#D1DF2C'}
+      underlayColor={!displayedChar ? '#d2db63' : '#D1DF2C'}
       style={[
         styles.touchable,
-        state.isPressed && !state.isDisabled
+        state.isPressed && !displayedChar
           ? styles.touchablePress
           : styles.touchableNormal,
       ]}
       onHideUnderlay={() => toggleIsPressed(false)}
       onShowUnderlay={() => toggleIsPressed(true)}
       onPress={buttonClick}>
-      <Text style={styles.char}>{state.displayedChar}</Text>
+      <Text style={styles.char}>{displayedChar}</Text>
     </TouchableHighlight>
   );
 };
