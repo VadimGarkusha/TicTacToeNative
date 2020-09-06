@@ -4,7 +4,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faRedo} from '@fortawesome/free-solid-svg-icons';
 import {useNavigation} from '@react-navigation/native';
 
-const GameHeader = function ({playerOne, playerTwo, isXTurn, restartGame}) {
+const GameHeader = function ({
+  playerOne,
+  playerTwo,
+  isXTurn,
+  restartGame,
+  isGameOver,
+}) {
   const navigation = useNavigation();
 
   return (
@@ -20,9 +26,15 @@ const GameHeader = function ({playerOne, playerTwo, isXTurn, restartGame}) {
       </TouchableHighlight>
       <View style={styles.sectionView}>
         <View
-          style={[styles.playerCharView, isXTurn ? styles.purpleBorder : null]}>
+          style={[
+            styles.playerCharView,
+            isXTurn && !isGameOver ? styles.purpleBorder : {},
+          ]}>
           <Text
-            style={[styles.playerChar, isXTurn ? styles.purpleColor : null]}>
+            style={[
+              styles.playerChar,
+              isXTurn && !isGameOver ? styles.purpleColor : {},
+            ]}>
             X
           </Text>
         </View>
@@ -32,10 +44,13 @@ const GameHeader = function ({playerOne, playerTwo, isXTurn, restartGame}) {
         <View
           style={[
             styles.playerCharView,
-            !isXTurn ? styles.purpleBorder : null,
+            !isXTurn && !isGameOver ? styles.purpleBorder : {},
           ]}>
           <Text
-            style={[styles.playerChar, !isXTurn ? styles.purpleColor : null]}>
+            style={[
+              styles.playerChar,
+              !isXTurn && !isGameOver ? styles.purpleColor : {},
+            ]}>
             O
           </Text>
         </View>

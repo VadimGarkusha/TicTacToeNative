@@ -2,14 +2,17 @@ import React from 'react';
 import {SafeAreaView, Text, StatusBar, StyleSheet, View} from 'react-native';
 import Square from './Square';
 import GameHeader from './GameHeader';
-import {isGameOverCheck} from './GameUtilities';
+import {isAnyPlayerWon} from './GameUtilities';
+
+const defaultState = {
+  isXTurn: true,
+  playedSquares: [],
+  isGameOver: false,
+  wonSquares: [],
+};
 
 const Game = function ({route}) {
-  const [state, setState] = React.useState({
-    isXTurn: true,
-    playedSquares: [],
-    isGameOver: false,
-  });
+  const [state, setState] = React.useState(defaultState);
 
   const {playerOneName, playerTwoName} = route.params;
 
@@ -19,24 +22,28 @@ const Game = function ({route}) {
       [...squareId, state.isXTurn ? 'X' : 'O'],
     ];
 
-    const isGameOver =
-      isGameOverCheck(newPlayedSquares) || newPlayedSquares === 9;
+    const isPlayerWon = isAnyPlayerWon(newPlayedSquares);
+    const isGameOver = isPlayerWon || newPlayedSquares === 9;
 
     setState({
       ...state,
       isXTurn: !state.isXTurn,
       playedSquares: newPlayedSquares,
       isGameOver,
+      wonSquares: isPlayerWon || [],
     });
   };
 
   const restartGame = () => {
-    setState({
-      isXTurn: true,
-      playedSquares: [],
-      isGameOver: false,
-    });
+    setState(defaultState);
   };
+
+  const getDisplayedChar = (i, j) =>
+    state.playedSquares.find((s) => s[0] === i && s[1] === j)
+      ? state.playedSquares.find((s) => s[0] === i && s[1] === j)[2]
+      : '';
+  const isWonSquare = (i, j) =>
+    state.wonSquares.some((e) => e[0] === i && e[1] === j);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -45,6 +52,7 @@ const Game = function ({route}) {
         playerTwo={playerTwoName}
         isXTurn={state.isXTurn}
         restartGame={restartGame}
+        isGameOver={state.isGameOver}
       />
       <View style={styles.gameArea}>
         {[...Array(3)].map((e, i) => (
@@ -53,15 +61,10 @@ const Game = function ({route}) {
               <Square
                 isXTurn
                 toggleTurnChar={toggleTurnChar}
-                displayedChar={
-                  state.playedSquares.find((s) => s[0] === i && s[1] === j)
-                    ? state.playedSquares.find(
-                        (s) => s[0] === i && s[1] === j,
-                      )[2]
-                    : ''
-                }
+                displayedChar={getDisplayedChar(i, j)}
                 squareId={[i, j]}
                 isGameOver={state.isGameOver}
+                isWonSquare={isWonSquare(i, j)}
                 key={j}
               />
             ))}

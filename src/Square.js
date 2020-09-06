@@ -6,6 +6,7 @@ const Square = function ({
   squareId,
   displayedChar,
   isGameOver,
+  isWonSquare,
 }) {
   const [state, setState] = React.useState({
     isPressed: false,
@@ -27,14 +28,26 @@ const Square = function ({
       underlayColor={!displayedChar ? '#d2db63' : '#D1DF2C'}
       style={[
         styles.touchable,
-        state.isPressed && !displayedChar
-          ? styles.touchablePress
-          : styles.touchableNormal,
+        (state.isPressed && !displayedChar) || isWonSquare
+          ? styles.purpleBorder
+          : isGameOver
+          ? styles.touchanbleDisabled
+          : styles.whiteBorder,
       ]}
       onHideUnderlay={() => toggleIsPressed(false)}
       onShowUnderlay={() => toggleIsPressed(true)}
       onPress={buttonClick}>
-      <Text style={styles.char}>{displayedChar}</Text>
+      <Text
+        style={[
+          styles.char,
+          isGameOver
+            ? isWonSquare
+              ? styles.purpleColor
+              : styles.touchanbleCharDisabled
+            : {},
+        ]}>
+        {displayedChar}
+      </Text>
     </TouchableHighlight>
   );
 };
@@ -48,11 +61,20 @@ const styles = StyleSheet.create({
     margin: 2,
     justifyContent: 'center',
   },
-  touchablePress: {
+  purpleBorder: {
     borderColor: '#8966E3',
   },
-  touchableNormal: {
+  purpleColor: {
+    color: '#8966E3',
+  },
+  whiteBorder: {
     borderColor: '#fff',
+  },
+  touchanbleDisabled: {
+    borderColor: '#BCBC6B',
+  },
+  touchanbleCharDisabled: {
+    color: '#BCBC6B',
   },
   char: {
     color: '#fff',
