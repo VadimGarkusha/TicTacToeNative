@@ -67,3 +67,16 @@ export function isAnyPlayerWon(playedSquares, fieldSize) {
 
   return false;
 }
+const getRandomNumber = (minimum, maximum) =>
+  (Math.random() * (maximum - minimum + 1)) << 0;
+
+export function findNextTurn(playedSquares, fieldSize) {
+  let newI = getRandomNumber(0, fieldSize - 1),
+    newJ = getRandomNumber(0, fieldSize - 1);
+  while (playedSquares.some((e) => e[0] === newI && e[1] === newJ)) {
+    (newI = getRandomNumber(0, fieldSize - 1)),
+      (newJ = getRandomNumber(0, fieldSize - 1));
+  }
+
+  return [newI, newJ];
+}

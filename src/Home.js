@@ -32,6 +32,7 @@ const Home = function ({navigation}) {
       playerOneName: state.isAgainstAi ? 'Player' : 'Player 1',
       playerTwoName: state.isAgainstAi ? 'AI' : 'Player 2',
       fieldSize: state.isThreeByThree ? 3 : 4,
+      isAgainstAi: state.isAgainstAi,
     };
 
     navigation.navigate('Game', configuration);

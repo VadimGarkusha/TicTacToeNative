@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import Square from './Square';
 import GameHeader from './GameHeader';
-import {isAnyPlayerWon} from './GameUtilities';
+import {isAnyPlayerWon, findNextTurn} from './GameUtilities';
 
 const defaultState = {
   isXTurn: true,
@@ -12,26 +12,45 @@ const defaultState = {
 };
 
 const Game = function ({route}) {
-  const {playerOneName, playerTwoName, fieldSize} = route.params;
+  const {playerOneName, playerTwoName, fieldSize, isAgainstAi} = route.params;
 
   const [state, setState] = React.useState(defaultState);
 
   const toggleTurnChar = (squareId) => {
-    const newPlayedSquares = [
+    let newPlayedSquares = [
       ...state.playedSquares,
       [...squareId, state.isXTurn ? 'X' : 'O'],
     ];
 
-    const isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
-    const isGameOver = isPlayerWon || newPlayedSquares === 9;
+    let isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
+    let isGameOver =
+      isPlayerWon || newPlayedSquares.length === fieldSize * fieldSize;
 
-    setState({
-      ...state,
-      isXTurn: !state.isXTurn,
-      playedSquares: newPlayedSquares,
-      isGameOver,
-      wonSquares: isPlayerWon || [],
-    });
+    if (!isAgainstAi)
+      setState({
+        ...state,
+        isXTurn: !state.isXTurn,
+        playedSquares: newPlayedSquares,
+        isGameOver,
+        wonSquares: isPlayerWon || [],
+      });
+    else {
+      if (!isGameOver) {
+        const nextTurn = findNextTurn(newPlayedSquares, fieldSize);
+        newPlayedSquares = [...newPlayedSquares, [...nextTurn, 'O']];
+
+        isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
+        isGameOver =
+          isPlayerWon || newPlayedSquares.length === fieldSize * fieldSize;
+      }
+
+      setState({
+        ...state,
+        playedSquares: newPlayedSquares,
+        isGameOver,
+        wonSquares: isPlayerWon || [],
+      });
+    }
   };
 
   const restartGame = () => {
