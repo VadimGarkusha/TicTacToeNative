@@ -9,6 +9,7 @@ const defaultState = {
   playedSquares: [],
   isGameOver: false,
   wonSquares: [],
+  winnerName: '',
 };
 
 const Game = function ({route}) {
@@ -21,8 +22,12 @@ const Game = function ({route}) {
       ...state.playedSquares,
       [...squareId, state.isXTurn ? 'X' : 'O'],
     ];
+    let winnerName = '';
 
     let isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
+    if (isPlayerWon) {
+      winnerName = state.isXTurn ? playerOneName : playerTwoName;
+    }
     let isGameOver =
       isPlayerWon || newPlayedSquares.length === fieldSize * fieldSize;
 
@@ -33,6 +38,7 @@ const Game = function ({route}) {
         playedSquares: newPlayedSquares,
         isGameOver,
         wonSquares: isPlayerWon || [],
+        winnerName,
       });
     else {
       if (!isGameOver) {
@@ -40,6 +46,9 @@ const Game = function ({route}) {
         newPlayedSquares = [...newPlayedSquares, [...nextTurn, 'O']];
 
         isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
+        if (isPlayerWon) {
+          winnerName = playerTwoName;
+        }
         isGameOver =
           isPlayerWon || newPlayedSquares.length === fieldSize * fieldSize;
       }
@@ -49,6 +58,7 @@ const Game = function ({route}) {
         playedSquares: newPlayedSquares,
         isGameOver,
         wonSquares: isPlayerWon || [],
+        winnerName,
       });
     }
   };
@@ -72,6 +82,7 @@ const Game = function ({route}) {
         isXTurn={state.isXTurn}
         restartGame={restartGame}
         isGameOver={state.isGameOver}
+        winnerName={state.winnerName}
       />
       <View style={styles.gameArea}>
         {[...Array(fieldSize)].map((e, i) => (
