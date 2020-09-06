@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text, StatusBar, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import Square from './Square';
 import GameHeader from './GameHeader';
 import {isAnyPlayerWon} from './GameUtilities';
@@ -12,9 +12,9 @@ const defaultState = {
 };
 
 const Game = function ({route}) {
-  const [state, setState] = React.useState(defaultState);
+  const {playerOneName, playerTwoName, fieldSize} = route.params;
 
-  const {playerOneName, playerTwoName} = route.params;
+  const [state, setState] = React.useState(defaultState);
 
   const toggleTurnChar = (squareId) => {
     const newPlayedSquares = [
@@ -22,7 +22,7 @@ const Game = function ({route}) {
       [...squareId, state.isXTurn ? 'X' : 'O'],
     ];
 
-    const isPlayerWon = isAnyPlayerWon(newPlayedSquares);
+    const isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
     const isGameOver = isPlayerWon || newPlayedSquares === 9;
 
     setState({
@@ -55,9 +55,9 @@ const Game = function ({route}) {
         isGameOver={state.isGameOver}
       />
       <View style={styles.gameArea}>
-        {[...Array(3)].map((e, i) => (
+        {[...Array(fieldSize)].map((e, i) => (
           <View style={styles.gameRow} key={i}>
-            {[...Array(3)].map((e, j) => (
+            {[...Array(fieldSize)].map((e, j) => (
               <Square
                 isXTurn
                 toggleTurnChar={toggleTurnChar}

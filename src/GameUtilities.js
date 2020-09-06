@@ -1,15 +1,17 @@
-export function isAnyPlayerWon(playedSquares) {
+export function isAnyPlayerWon(playedSquares, fieldSize) {
   let crossedSquares;
 
   // checking vertical lines
-  [...Array(3).keys()].some((i) => {
+  [...Array(fieldSize).keys()].some((i) => {
     const isFilledLineX =
-      playedSquares.filter((s) => s[1] === i && s[2] === 'X').length === 3;
+      playedSquares.filter((s) => s[1] === i && s[2] === 'X').length ===
+      fieldSize;
     const isFilledLineO =
-      playedSquares.filter((s) => s[1] === i && s[2] === 'O').length === 3;
+      playedSquares.filter((s) => s[1] === i && s[2] === 'O').length ===
+      fieldSize;
 
     if (isFilledLineX || isFilledLineO) {
-      crossedSquares = [...Array(3).keys()].map((k) => [k, i]);
+      crossedSquares = [...Array(fieldSize).keys()].map((k) => [k, i]);
     }
     return crossedSquares;
   });
@@ -19,14 +21,16 @@ export function isAnyPlayerWon(playedSquares) {
   }
 
   //checking horizontal lines
-  [...Array(3).keys()].some((i) => {
+  [...Array(fieldSize).keys()].some((i) => {
     const isFilledLineX =
-      playedSquares.filter((s) => s[0] === i && s[2] === 'X').length === 3;
+      playedSquares.filter((s) => s[0] === i && s[2] === 'X').length ===
+      fieldSize;
     const isFilledLineO =
-      playedSquares.filter((s) => s[0] === i && s[2] === 'O').length === 3;
+      playedSquares.filter((s) => s[0] === i && s[2] === 'O').length ===
+      fieldSize;
 
     if (isFilledLineX || isFilledLineO) {
-      crossedSquares = [...Array(3).keys()].map((k) => [i, k]);
+      crossedSquares = [...Array(fieldSize).keys()].map((k) => [i, k]);
     }
     return crossedSquares;
   });
@@ -37,18 +41,24 @@ export function isAnyPlayerWon(playedSquares) {
 
   //checking diagonal lines
   const isDiagonalFilled =
-    playedSquares.filter((s) => s[0] === s[1] && s[2] === 'X').length === 3 ||
-    playedSquares.filter((s) => s[0] === s[1] && s[2] === 'O').length === 3;
+    playedSquares.filter((s) => s[0] === s[1] && s[2] === 'X').length ===
+      fieldSize ||
+    playedSquares.filter((s) => s[0] === s[1] && s[2] === 'O').length ===
+      fieldSize;
   if (isDiagonalFilled) {
-    crossedSquares = [...Array(3).keys()].map((k) => [k, k]);
+    crossedSquares = [...Array(fieldSize).keys()].map((k) => [k, k]);
   }
 
   const isAntiDiagonalFilled =
-    playedSquares.filter((s) => s[0] + s[1] === 2 && s[2] === 'X').length ===
-      3 ||
-    playedSquares.filter((s) => s[0] + s[1] === 2 && s[2] === 'O').length === 3;
+    playedSquares.filter((s) => s[0] + s[1] === fieldSize - 1 && s[2] === 'X')
+      .length === fieldSize ||
+    playedSquares.filter((s) => s[0] + s[1] === fieldSize - 1 && s[2] === 'O')
+      .length === fieldSize;
   if (isAntiDiagonalFilled) {
-    crossedSquares = [...Array(3).keys()].map((k) => [k, 2 - k]);
+    crossedSquares = [...Array(fieldSize).keys()].map((k) => [
+      k,
+      fieldSize - 1 - k,
+    ]);
   }
 
   if (crossedSquares) {

@@ -28,12 +28,13 @@ const Home = function ({navigation}) {
   };
 
   const navigateToGame = () => {
-    const players = {
+    const configuration = {
       playerOneName: state.isAgainstAi ? 'Player' : 'Player 1',
       playerTwoName: state.isAgainstAi ? 'AI' : 'Player 2',
+      fieldSize: state.isThreeByThree ? 3 : 4,
     };
 
-    navigation.navigate('Game', players);
+    navigation.navigate('Game', configuration);
   };
 
   return (
