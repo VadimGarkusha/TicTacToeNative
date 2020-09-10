@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,26 +6,33 @@ import {
   TouchableHighlight,
   Text,
 } from 'react-native';
-import Video from 'react-native-video';
 import GameConfiguration from './GameConfiguration';
-import BackgroundMusic from '../assets/sfx/back.mp4';
+import HomeScreenMusic from './HomeScreenMusic';
 
 const Home = function ({navigation}) {
   const [state, setState] = useState({
     isAgainstAi: true,
     isThreeByThree: true,
     isNewGamePressed: false,
+    isNewGameSoundPaused: true,
+    isPlayerConfigSoundPaused: true,
+    isFieldConfigSoundPaused: true,
   });
-  let backgroundMusicRef;
-
-  useEffect(() => {}, []);
 
   const togglePlayerSetting = () => {
-    setState({...state, isAgainstAi: !state.isAgainstAi});
+    setState({
+      ...state,
+      isAgainstAi: !state.isAgainstAi,
+      isPlayerConfigSoundPaused: false,
+    });
   };
 
   const toggleFieldSize = () => {
-    setState({...state, isThreeByThree: !state.isThreeByThree});
+    setState({
+      ...state,
+      isThreeByThree: !state.isThreeByThree,
+      isFieldConfigSoundPaused: false,
+    });
   };
 
   const toggleNewGameIsPressed = (isNewGamePressed) => {
@@ -33,6 +40,8 @@ const Home = function ({navigation}) {
   };
 
   const navigateToGame = () => {
+    setState({...state, isNewGameSoundPaused: false});
+
     const configuration = {
       playerOneName: state.isAgainstAi ? 'Player' : 'Player 1',
       playerTwoName: state.isAgainstAi ? 'AI' : 'Player 2',
@@ -43,19 +52,27 @@ const Home = function ({navigation}) {
     navigation.navigate('Game', configuration);
   };
 
+  const resetNewGameSound = () => {
+    setState({...state, isNewGameSoundPaused: true});
+  };
+
+  const resetPlayerConfigSound = () => {
+    setState({...state, isPlayerConfigSoundPaused: true});
+  };
+
+  const resetFieldConfigSound = () => {
+    setState({...state, isFieldConfigSoundPaused: true});
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <Video
-        source={BackgroundMusic} // Can be a URL or a local file.
-        ref={(ref) => {
-          this.backgroundMusicRef = ref;
-        }}
-        onError={(er) => {
-          console.log(er);
-        }}
-        audioOnly={true}
-        playWhenInactive={true}
-        repeat={true}
+      <HomeScreenMusic
+        isNewGameSoundPaused={state.isNewGameSoundPaused}
+        resetNewGameSound={resetNewGameSound}
+        isPlayerConfigSoundPaused={state.isPlayerConfigSoundPaused}
+        resetPlayerConfigSound={resetPlayerConfigSound}
+        isFieldConfigSoundPaused={state.isFieldConfigSoundPaused}
+        resetFieldConfigSound={resetFieldConfigSound}
       />
       <View style={styles.newGameArea}>
         <TouchableHighlight

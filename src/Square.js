@@ -14,7 +14,7 @@ const Square = function ({
     isPressed: false,
     pauseSound: true,
   });
-  let popSoundRef;
+  let popSound;
 
   const toggleIsPressed = (isPressed) => {
     setState({...state, isPressed});
@@ -22,7 +22,7 @@ const Square = function ({
 
   useEffect(() => {
     if (state.pauseSound) {
-      popSoundRef.seek(0);
+      popSound.seek(0);
     }
   }, [state.pauseSound]);
 
@@ -56,13 +56,10 @@ const Square = function ({
         <Video
           source={PopSound}
           ref={(ref) => {
-            popSoundRef = ref;
+            popSound = ref;
           }}
           audioOnly={true}
           onEnd={resetVideo}
-          onSeek={() => {
-            console.log('seek');
-          }}
           paused={state.pauseSound}
         />
         <Text
