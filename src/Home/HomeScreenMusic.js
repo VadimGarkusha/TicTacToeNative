@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import Video from 'react-native-video';
-import BackgroundMusic from '../assets/sfx/back.mp4';
-import NewGameSound from '../assets/sfx/new_game.mp4';
-import ChangeConfigSound from '../assets/sfx/change_config.mp4';
+import BackgroundMusic from '../../assets/sfx/back.mp4';
+import NewGameSound from '../../assets/sfx/new_game.mp4';
+import ChangeConfigSound from '../../assets/sfx/change_config.mp4';
 
 const HomeScreenMusic = function ({
   isNewGameSoundPaused,

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableHighlight, StyleSheet, Text} from 'react-native';
-import PopSound from '../assets/sfx/pop.mp4';
+import PopSound from '../../assets/sfx/pop.mp4';
 import Video from 'react-native-video';
 
 const Square = function ({

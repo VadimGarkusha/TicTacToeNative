@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -109,7 +109,7 @@ const GameHeader = function ({
         <View style={styles.bottomHeaderView}>
           <Animated.Text
             style={[styles.winnerText, {backgroundColor: animatedColor}]}>
-            {winnerName} won
+            {winnerName ? `${winnerName} won` : 'Draw'}
           </Animated.Text>
         </View>
       )}

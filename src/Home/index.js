@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import GameConfiguration from './GameConfiguration';
 import HomeScreenMusic from './HomeScreenMusic';
+import HomeHeader from './HomeHeader';
 
 const Home = function ({navigation}) {
   const [state, setState] = useState({
@@ -74,6 +75,7 @@ const Home = function ({navigation}) {
         isFieldConfigSoundPaused={state.isFieldConfigSoundPaused}
         resetFieldConfigSound={resetFieldConfigSound}
       />
+      <HomeHeader />
       <View style={styles.newGameArea}>
         <TouchableHighlight
           style={
