@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,14 +6,19 @@ import {
   TouchableHighlight,
   Text,
 } from 'react-native';
+import Video from 'react-native-video';
 import GameConfiguration from './GameConfiguration';
+import BackgroundMusic from '../assets/sfx/back.mp4';
 
 const Home = function ({navigation}) {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     isAgainstAi: true,
     isThreeByThree: true,
     isNewGamePressed: false,
   });
+  let backgroundMusicRef;
+
+  useEffect(() => {}, []);
 
   const togglePlayerSetting = () => {
     setState({...state, isAgainstAi: !state.isAgainstAi});
@@ -40,6 +45,18 @@ const Home = function ({navigation}) {
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
+      <Video
+        source={BackgroundMusic} // Can be a URL or a local file.
+        ref={(ref) => {
+          this.backgroundMusicRef = ref;
+        }}
+        onError={(er) => {
+          console.log(er);
+        }}
+        audioOnly={true}
+        playWhenInactive={true}
+        repeat={true}
+      />
       <View style={styles.newGameArea}>
         <TouchableHighlight
           style={

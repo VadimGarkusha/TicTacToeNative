@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableHighlight, StyleSheet, Text} from 'react-native';
+import PopSound from '../assets/sfx/pop.mp4';
+import Video from 'react-native-video';
 
 const Square = function ({
   toggleTurnChar,
@@ -8,18 +10,31 @@ const Square = function ({
   isGameOver,
   isWonSquare,
 }) {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     isPressed: false,
+    pauseSound: true,
   });
+  let popSoundRef;
 
   const toggleIsPressed = (isPressed) => {
     setState({...state, isPressed});
   };
 
+  useEffect(() => {
+    if (state.pauseSound) {
+      popSoundRef.seek(0);
+    }
+  }, [state.pauseSound]);
+
   const buttonClick = () => {
     if (!displayedChar && !isGameOver) {
       toggleTurnChar(squareId);
+      setState({...state, pauseSound: false});
     }
+  };
+
+  const resetVideo = () => {
+    setState({...state, pauseSound: true});
   };
 
   return (
@@ -37,17 +52,31 @@ const Square = function ({
       onHideUnderlay={() => toggleIsPressed(false)}
       onShowUnderlay={() => toggleIsPressed(true)}
       onPress={buttonClick}>
-      <Text
-        style={[
-          styles.char,
-          isGameOver
-            ? isWonSquare
-              ? styles.purpleColor
-              : styles.touchanbleCharDisabled
-            : {},
-        ]}>
-        {displayedChar}
-      </Text>
+      <>
+        <Video
+          source={PopSound}
+          ref={(ref) => {
+            popSoundRef = ref;
+          }}
+          audioOnly={true}
+          onEnd={resetVideo}
+          onSeek={() => {
+            console.log('seek');
+          }}
+          paused={state.pauseSound}
+        />
+        <Text
+          style={[
+            styles.char,
+            isGameOver
+              ? isWonSquare
+                ? styles.purpleColor
+                : styles.touchanbleCharDisabled
+              : {},
+          ]}>
+          {displayedChar}
+        </Text>
+      </>
     </TouchableHighlight>
   );
 };
