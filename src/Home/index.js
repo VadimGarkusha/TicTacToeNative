@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
+    marginBottom: '20%',
   },
   newGameButton: {
     width: '90%',

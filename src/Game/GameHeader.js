@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,9 +6,13 @@ import {
   TouchableHighlight,
   Animated,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faRedo} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation} from '@react-navigation/native';
+import Video from 'react-native-video';
+import DefaultSound from '../../assets/sfx/default.mp4';
+import NewGameSound from '../../assets/sfx/new_game.mp4';
+import AppContext from '../AppContext';
 
 const GameHeader = function ({
   playerOne,
@@ -18,10 +22,19 @@ const GameHeader = function ({
   isGameOver,
   winnerName,
 }) {
+  let backHomeButtonSound, newGameButtonSound;
+
   const navigation = useNavigation();
   const [animation, setAnimation] = useState(new Animated.Value(0));
+  const [state, setState] = useState({
+    isBackHomeButtonSoundPaused: true,
+    isNewGameButtonSoundPaused: true,
+  });
 
-  if (isGameOver)
+  const userContext = useContext(AppContext);
+  const {sfxEnabled} = userContext;
+
+  if (isGameOver) {
     Animated.loop(
       Animated.sequence([
         Animated.timing(animation, {
@@ -40,6 +53,7 @@ const GameHeader = function ({
         iterations: 100,
       },
     ).start();
+  }
 
   const animatedColor = animation.interpolate({
     inputRange: [0.0833, 0.25, 0.4166, 0.5833, 0.75, 0.9166],
@@ -53,12 +67,25 @@ const GameHeader = function ({
     ],
   });
 
+  useEffect(() => {
+    if (state.isNewGameButtonSoundPaused) {
+      newGameButtonSound.seek(0);
+    }
+  }, [state.isNewGameButtonSoundPaused]);
+
+  useEffect(() => {
+    if (state.isBackHomeButtonSoundPaused) {
+      backHomeButtonSound.seek(0);
+    }
+  }, [state.isBackHomeButtonSoundPaused]);
+
   return (
     <View style={styles.gameHeaderView}>
       <View style={styles.topHeaderView}>
         <TouchableHighlight
           style={[styles.iconView, styles.sectionView]}
           onPress={() => {
+            setState({...state, isBackHomeButtonSoundPaused: false});
             navigation.navigate('Home');
           }}
           underlayColor="#D1DF2C"
@@ -99,7 +126,10 @@ const GameHeader = function ({
         </View>
         <TouchableHighlight
           style={[styles.iconView, styles.sectionView]}
-          onPress={restartGame}
+          onPress={() => {
+            setState({...state, isNewGameButtonSoundPaused: false});
+            restartGame();
+          }}
           underlayColor="#D1DF2C"
           activeOpacity={0.9}>
           <FontAwesomeIcon size={41} color="white" icon={faRedo} />
@@ -113,6 +143,30 @@ const GameHeader = function ({
           </Animated.Text>
         </View>
       )}
+      <Video
+        source={DefaultSound}
+        audioOnly={true}
+        ref={(ref) => {
+          backHomeButtonSound = ref;
+        }}
+        onEnd={() => {
+          setState({...state, isBackHomeButtonSoundPaused: true});
+        }}
+        paused={state.isBackHomeButtonSoundPaused}
+        muted={!sfxEnabled}
+      />
+      <Video
+        source={NewGameSound}
+        audioOnly={true}
+        ref={(ref) => {
+          newGameButtonSound = ref;
+        }}
+        onEnd={() => {
+          setState({...state, isNewGameButtonSoundPaused: true});
+        }}
+        paused={state.isNewGameButtonSoundPaused}
+        muted={!sfxEnabled}
+      />
     </View>
   );
 };
