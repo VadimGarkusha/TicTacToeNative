@@ -1,0 +1,79 @@
+import React from 'react';
+import {StyleSheet, View, TouchableHighlight, Text} from 'react-native';
+
+const GameRadioSettings = function ({
+  isFirstOptionSelected,
+  toggleOption,
+  title,
+}) {
+  const toggleSelectedOption = (isCallerFirstOption) => {
+    if (
+      !(isCallerFirstOption && isFirstOptionSelected) &&
+      (isCallerFirstOption || isFirstOptionSelected)
+    ) {
+      console.log(isFirstOptionSelected);
+
+      toggleOption();
+    }
+  };
+
+  return (
+    <View style={styles.configurationView}>
+      <Text style={styles.titleText}>{title}</Text>
+      <View style={styles.radioView}>
+        <TouchableHighlight
+          style={
+            isFirstOptionSelected
+              ? [styles.configurationOption, styles.purpleBackground]
+              : styles.configurationOption
+          }
+          onPress={() => toggleSelectedOption(true)}>
+          <Text style={styles.configurationOptionText}>On</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={
+            !isFirstOptionSelected
+              ? [styles.configurationOption, styles.purpleBackground]
+              : styles.configurationOption
+          }
+          onPress={() => toggleSelectedOption(false)}>
+          <Text style={styles.configurationOptionText}>Off</Text>
+        </TouchableHighlight>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  configurationView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    marginTop: 25,
+  },
+  configurationOption: {
+    flex: 1,
+    borderRadius: 5,
+    height: 50,
+    justifyContent: 'center',
+  },
+  configurationOptionText: {
+    fontSize: 22,
+    color: '#fff',
+    textAlign: 'center',
+  },
+  purpleBackground: {
+    backgroundColor: '#8966E3',
+  },
+  titleText: {
+    color: '#fff',
+    fontSize: 24,
+    flex: 1,
+  },
+  radioView: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
+
+export default GameRadioSettings;

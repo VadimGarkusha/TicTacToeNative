@@ -1,23 +1,30 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableHighlight,
-  Animated,
-} from 'react-native';
+import React, {useState, useContext} from 'react';
+import {Text, StyleSheet, View, TouchableHighlight, Modal} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCog, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation} from '@react-navigation/native';
+import GameRadioSettings from './GameRadioSettings';
+import AppContext from '../AppContext';
 
-const HomeHeader = function ({}) {
+const HomeHeader = function () {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const userContext = useContext(AppContext);
+  const {
+    musicEnabled,
+    sfxEnabled,
+    toggleSfxEnabled,
+    toggleMusicEnabled,
+  } = userContext;
+
   return (
     <View style={styles.headerView}>
       <TouchableHighlight
         style={[styles.iconView, styles.sectionView]}
-        // onPress={() => {
-        //   navigation.navigate('Home');
-        // }}
+        onPress={openModal}
         underlayColor="#D1DF2C"
         activeOpacity={0.9}>
         <FontAwesomeIcon size={45} color="white" icon={faCog} />
@@ -29,6 +36,30 @@ const HomeHeader = function ({}) {
         activeOpacity={0.9}>
         <FontAwesomeIcon size={41} color="white" icon={faShoppingCart} />
       </TouchableHighlight>
+      <Modal animationType="slide" visible={modalVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalBody}>
+            <Text style={styles.settingsText}>Settings</Text>
+            <GameRadioSettings
+              isFirstOptionSelected={musicEnabled}
+              toggleOption={toggleMusicEnabled}
+              title="Music"
+            />
+            <GameRadioSettings
+              isFirstOptionSelected={sfxEnabled}
+              toggleOption={toggleSfxEnabled}
+              title="SFX"
+            />
+            <TouchableHighlight
+              style={styles.closeTouchable}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}>
+              <Text style={styles.closeText}>Close</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -41,36 +72,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  playerText: {
-    color: '#fff',
-    fontSize: 22,
-    textAlign: 'center',
-  },
-  playerCharView: {
-    borderWidth: 2,
-    width: 50,
-    aspectRatio: 1,
-    borderRadius: 25,
-    borderColor: '#fff',
-    justifyContent: 'center',
-  },
-  playerChar: {
-    color: '#fff',
-    fontSize: 30,
-    borderColor: '#20232a',
-    textAlign: 'center',
-  },
   iconView: {
     paddingTop: 5,
   },
   sectionView: {
     alignItems: 'center',
   },
-  purpleBorder: {
-    borderColor: '#8966E3',
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#D1DF2C',
   },
-  purpleColor: {
-    color: '#8966E3',
+  modalBody: {
+    marginTop: 22,
+    width: '90%',
+  },
+  settingsText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 30,
+    marginBottom: 20,
+  },
+  closeTouchable: {
+    marginTop: 40,
+    borderColor: '#fff',
+    borderWidth: 2,
+    paddingVertical: 10,
+  },
+  closeText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 24,
   },
 });
 

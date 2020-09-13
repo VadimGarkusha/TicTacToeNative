@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import Video from 'react-native-video';
 import BackgroundMusic from '../../assets/sfx/back.mp4';
 import NewGameSound from '../../assets/sfx/new_game.mp4';
 import ChangeConfigSound from '../../assets/sfx/change_config.mp4';
+import AppContext from '../AppContext';
 
 const HomeScreenMusic = function ({
   isNewGameSoundPaused,
@@ -13,6 +14,9 @@ const HomeScreenMusic = function ({
   resetFieldConfigSound,
 }) {
   let newGameSound, playerConfigSound, fieldConfigSound;
+
+  const userContext = useContext(AppContext);
+  const {musicEnabled, sfxEnabled} = userContext;
 
   useEffect(() => {
     if (isNewGameSoundPaused) {
@@ -39,6 +43,7 @@ const HomeScreenMusic = function ({
         audioOnly={true}
         playWhenInactive={true}
         repeat={true}
+        muted={!musicEnabled}
       />
       <Video
         source={NewGameSound}
@@ -48,6 +53,7 @@ const HomeScreenMusic = function ({
         }}
         onEnd={resetNewGameSound}
         paused={isNewGameSoundPaused}
+        muted={!sfxEnabled}
       />
       <Video
         source={ChangeConfigSound}
@@ -57,6 +63,7 @@ const HomeScreenMusic = function ({
         }}
         onEnd={resetPlayerConfigSound}
         paused={isPlayerConfigSoundPaused}
+        muted={!sfxEnabled}
       />
       <Video
         source={ChangeConfigSound}
@@ -66,6 +73,7 @@ const HomeScreenMusic = function ({
         }}
         onEnd={resetFieldConfigSound}
         paused={isFieldConfigSoundPaused}
+        muted={!sfxEnabled}
       />
     </>
   );
