@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#D1DF2C',
   },
   modalBody: {
-    marginTop: 22,
     width: '90%',
+    marginBottom: '5%',
   },
   settingsText: {
     color: '#fff',
