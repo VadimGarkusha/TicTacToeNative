@@ -5,10 +5,14 @@ import {faCog, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import GameRadioSettings from './GameRadioSettings';
 import AppContext from '../AppContext';
 
-const HomeHeader = function () {
+const HomeHeader = function ({
+  playSettingsButtonSound,
+  playHeaderCloseButtonSound,
+}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
+    playSettingsButtonSound();
     setModalVisible(true);
   };
 
@@ -53,6 +57,7 @@ const HomeHeader = function () {
             <TouchableHighlight
               style={styles.closeTouchable}
               onPress={() => {
+                playHeaderCloseButtonSound();
                 setModalVisible(!modalVisible);
               }}>
               <Text style={styles.closeText}>Close</Text>

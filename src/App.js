@@ -13,14 +13,10 @@ const App = function () {
   const [sfxEnabled, setSfxEnabled] = useState(true);
 
   const toggleMusicEnabled = () => {
-    console.log('changing state', musicEnabled);
-
     setMusicEnabled(!musicEnabled);
   };
 
   const toggleSfxEnabled = () => {
-    console.log('changing state', sfxEnabled);
-
     setSfxEnabled(!sfxEnabled);
   };
 

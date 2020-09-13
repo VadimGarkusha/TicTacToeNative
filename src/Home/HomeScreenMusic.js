@@ -3,6 +3,7 @@ import Video from 'react-native-video';
 import BackgroundMusic from '../../assets/sfx/back.mp4';
 import NewGameSound from '../../assets/sfx/new_game.mp4';
 import ChangeConfigSound from '../../assets/sfx/change_config.mp4';
+import DefaultSound from '../../assets/sfx/default.mp4';
 import AppContext from '../AppContext';
 
 const HomeScreenMusic = function ({
@@ -12,8 +13,16 @@ const HomeScreenMusic = function ({
   resetPlayerConfigSound,
   isFieldConfigSoundPaused,
   resetFieldConfigSound,
+  isSettingsButtonSoundPaused,
+  resetSettingsButtonSound,
+  resetHeaderCloseButtonSound,
+  isHeaderCloseButtonPaused,
 }) {
-  let newGameSound, playerConfigSound, fieldConfigSound;
+  let newGameSound,
+    playerConfigSound,
+    fieldConfigSound,
+    settingsButtonSound,
+    headerCloseButtonSound;
 
   const userContext = useContext(AppContext);
   const {musicEnabled, sfxEnabled} = userContext;
@@ -36,6 +45,18 @@ const HomeScreenMusic = function ({
     }
   }, [isFieldConfigSoundPaused]);
 
+  useEffect(() => {
+    if (isSettingsButtonSoundPaused) {
+      settingsButtonSound.seek(0);
+    }
+  }, [isSettingsButtonSoundPaused]);
+
+  useEffect(() => {
+    if (isHeaderCloseButtonPaused) {
+      headerCloseButtonSound.seek(0);
+    }
+  }, [isHeaderCloseButtonPaused]);
+
   return (
     <>
       <Video
@@ -53,6 +74,26 @@ const HomeScreenMusic = function ({
         }}
         onEnd={resetNewGameSound}
         paused={isNewGameSoundPaused}
+        muted={!sfxEnabled}
+      />
+      <Video
+        source={DefaultSound}
+        audioOnly={true}
+        ref={(ref) => {
+          settingsButtonSound = ref;
+        }}
+        onEnd={resetSettingsButtonSound}
+        paused={isSettingsButtonSoundPaused}
+        muted={!sfxEnabled}
+      />
+      <Video
+        source={DefaultSound}
+        audioOnly={true}
+        ref={(ref) => {
+          headerCloseButtonSound = ref;
+        }}
+        onEnd={resetHeaderCloseButtonSound}
+        paused={isHeaderCloseButtonPaused}
         muted={!sfxEnabled}
       />
       <Video

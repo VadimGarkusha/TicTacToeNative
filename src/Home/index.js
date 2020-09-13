@@ -18,6 +18,8 @@ const Home = function ({navigation}) {
     isNewGameSoundPaused: true,
     isPlayerConfigSoundPaused: true,
     isFieldConfigSoundPaused: true,
+    isSettingsButtonSoundPaused: true,
+    isHeaderCloseButtonPaused: true,
   });
 
   const togglePlayerSetting = () => {
@@ -65,6 +67,22 @@ const Home = function ({navigation}) {
     setState({...state, isFieldConfigSoundPaused: true});
   };
 
+  const resetSettingsButtonSound = () => {
+    setState({...state, isSettingsButtonSoundPaused: true});
+  };
+
+  const playSettingsButtonSound = () => {
+    setState({...state, isSettingsButtonSoundPaused: false});
+  };
+
+  const resetHeaderCloseButtonSound = () => {
+    setState({...state, isHeaderCloseButtonPaused: true});
+  };
+
+  const playHeaderCloseButtonSound = () => {
+    setState({...state, isHeaderCloseButtonPaused: false});
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <HomeScreenMusic
@@ -74,8 +92,15 @@ const Home = function ({navigation}) {
         resetPlayerConfigSound={resetPlayerConfigSound}
         isFieldConfigSoundPaused={state.isFieldConfigSoundPaused}
         resetFieldConfigSound={resetFieldConfigSound}
+        isSettingsButtonSoundPaused={state.isSettingsButtonSoundPaused}
+        resetSettingsButtonSound={resetSettingsButtonSound}
+        isHeaderCloseButtonPaused={state.isHeaderCloseButtonPaused}
+        resetHeaderCloseButtonSound={resetHeaderCloseButtonSound}
       />
-      <HomeHeader />
+      <HomeHeader
+        playSettingsButtonSound={playSettingsButtonSound}
+        playHeaderCloseButtonSound={playHeaderCloseButtonSound}
+      />
       <View style={styles.newGameArea}>
         <TouchableHighlight
           style={

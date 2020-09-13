@@ -1,18 +1,34 @@
-import React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {StyleSheet, View, TouchableHighlight, Text} from 'react-native';
+import Video from 'react-native-video';
+import ChangeConfigSound from '../../assets/sfx/change_config.mp4';
+import AppContext from '../AppContext';
 
 const GameRadioSettings = function ({
   isFirstOptionSelected,
   toggleOption,
   title,
 }) {
+  const [isChangedConfigSoundPaused, setIsChangedConfigSoundPaused] = useState(
+    true,
+  );
+  let changeConfigSound;
+
+  const userContext = useContext(AppContext);
+  const {sfxEnabled} = userContext;
+
+  useEffect(() => {
+    if (isChangedConfigSoundPaused) {
+      changeConfigSound.seek(0);
+    }
+  }, [isChangedConfigSoundPaused]);
+
   const toggleSelectedOption = (isCallerFirstOption) => {
     if (
       !(isCallerFirstOption && isFirstOptionSelected) &&
       (isCallerFirstOption || isFirstOptionSelected)
     ) {
-      console.log(isFirstOptionSelected);
-
+      setIsChangedConfigSoundPaused(false);
       toggleOption();
     }
   };
@@ -40,6 +56,18 @@ const GameRadioSettings = function ({
           <Text style={styles.configurationOptionText}>Off</Text>
         </TouchableHighlight>
       </View>
+      <Video
+        source={ChangeConfigSound}
+        audioOnly={true}
+        ref={(ref) => {
+          changeConfigSound = ref;
+        }}
+        onEnd={() => {
+          setIsChangedConfigSoundPaused(true);
+        }}
+        paused={isChangedConfigSoundPaused}
+        muted={!sfxEnabled}
+      />
     </View>
   );
 };
