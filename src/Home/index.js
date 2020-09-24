@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,6 +6,8 @@ import {
   TouchableHighlight,
   Text,
 } from 'react-native';
+import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
+import {homeBannerId} from '../Ads';
 import GameConfiguration from './GameConfiguration';
 import HomeScreenMusic from './HomeScreenMusic';
 import HomeHeader from './HomeHeader';
@@ -136,6 +138,16 @@ const Home = function ({navigation}) {
           />
         </View>
       </View>
+      <BannerAd
+        unitId={__DEV__ ? TestIds.BANNER : homeBannerId}
+        size={BannerAdSize.SMART_BANNER}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+        onAdFailedToLoad={(error) => {
+          console.error('Advert failed to load: ', error);
+        }}
+      />
     </SafeAreaView>
   );
 };

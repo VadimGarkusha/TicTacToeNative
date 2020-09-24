@@ -1,7 +1,10 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
+import {gameBannerId} from '../Ads';
 import Square from './Square';
 import GameHeader from './GameHeader';
+
 import {isAnyPlayerWon, findNextTurn} from './GameUtilities';
 
 const defaultState = {
@@ -101,6 +104,16 @@ const Game = function ({route}) {
           </View>
         ))}
       </View>
+      <BannerAd
+        unitId={__DEV__ ? TestIds.BANNER : gameBannerId}
+        size={BannerAdSize.SMART_BANNER}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+        onAdFailedToLoad={(error) => {
+          console.error('Advert failed to load: ', error);
+        }}
+      />
     </SafeAreaView>
   );
 };
