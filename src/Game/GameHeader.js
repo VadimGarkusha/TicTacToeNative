@@ -174,7 +174,7 @@ const GameHeader = function ({
 const styles = StyleSheet.create({
   gameHeaderView: {
     marginHorizontal: 10,
-    height: 130,
+    height: 155,
     paddingTop: 10,
     flexDirection: 'column',
   },

@@ -1,9 +1,19 @@
 import React, {useState, useContext} from 'react';
-import {Text, StyleSheet, View, TouchableHighlight, Modal} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableHighlight,
+  Modal,
+  Linking,
+} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCog, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import GameRadioSettings from './GameRadioSettings';
 import AppContext from '../AppContext';
+
+const contentRightsUrl =
+  'https://sites.google.com/view/tictactoemin/content-rights';
 
 const HomeHeader = function ({
   playSettingsButtonSound,
@@ -24,17 +34,27 @@ const HomeHeader = function ({
     toggleMusicEnabled,
   } = userContext;
 
+  const showContentRights = () => {
+    Linking.canOpenURL(contentRightsUrl).then((supported) => {
+      if (supported) {
+        Linking.openURL(contentRightsUrl);
+      } else {
+        console.log("Don't know how to open URI: " + contentRightsUrl);
+      }
+    });
+  };
+
   return (
     <View style={styles.headerView}>
       <TouchableHighlight
-        style={[styles.iconView, styles.sectionView]}
+        style={styles.iconView}
         onPress={openModal}
         underlayColor="#D1DF2C"
         activeOpacity={0.9}>
         <FontAwesomeIcon size={45} color="white" icon={faCog} />
       </TouchableHighlight>
       <TouchableHighlight
-        style={[styles.iconView, styles.sectionView]}
+        style={[styles.iconView, styles.noDisplay]}
         // onPress={restartGame}
         underlayColor="#D1DF2C"
         activeOpacity={0.9}>
@@ -54,6 +74,11 @@ const HomeHeader = function ({
               toggleOption={toggleSfxEnabled}
               title="SFX"
             />
+            <TouchableHighlight
+              style={styles.contentRightsContainer}
+              onPress={showContentRights}>
+              <Text style={styles.contentRightsText}>Content Rights</Text>
+            </TouchableHighlight>
             <TouchableHighlight
               style={styles.closeTouchable}
               onPress={() => {
@@ -79,9 +104,10 @@ const styles = StyleSheet.create({
   },
   iconView: {
     paddingTop: 5,
-  },
-  sectionView: {
     alignItems: 'center',
+  },
+  noDisplay: {
+    display: 'none',
   },
   centeredView: {
     flex: 1,
@@ -98,6 +124,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
     marginBottom: 20,
+  },
+  contentRightsContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 30,
+  },
+  contentRightsText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18,
+    textDecorationLine: 'underline',
   },
   closeTouchable: {
     marginTop: 40,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Dimensions} from 'react-native';
 import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
 import {gameBannerId} from '../Ads';
 import Square from './Square';
@@ -17,6 +17,7 @@ const defaultState = {
 
 const Game = function ({route}) {
   const {playerOneName, playerTwoName, fieldSize, isAgainstAi} = route.params;
+  const deviceWidth = Dimensions.get('window').width;
 
   const [state, setState] = React.useState(defaultState);
 
