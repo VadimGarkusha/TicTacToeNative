@@ -6,6 +6,7 @@ import Square from './Square';
 import GameHeader from './GameHeader';
 import MinMaxAi from './MiniMaxAi';
 import {isAnyPlayerWon} from './GameUtilities';
+import {_difficultyLevel} from '../Constants';
 
 const defaultState = (fieldSize) => ({
   isXTurn: true,
@@ -45,10 +46,13 @@ const Game = function ({route}) {
         winnerName,
       });
     } else {
-      console.log(state.minMaxAi.getNextAiTurn(newPlayedSquares));
-
       if (!isGameOver) {
-        const nextTurn = state.minMaxAi.getNextAiTurn(newPlayedSquares);
+        const nextTurn = state.minMaxAi.getNextAiTurn(
+          newPlayedSquares,
+          _difficultyLevel.medium,
+        );
+        // console.log(nextTurn);
+
         newPlayedSquares = [...newPlayedSquares, [...nextTurn, 'O']];
 
         isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
