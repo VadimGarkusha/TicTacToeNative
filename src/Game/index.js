@@ -1,25 +1,25 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View, Dimensions} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
-import {gameBannerId} from '../Ads';
+import {_gameBannerId} from '../Constants';
 import Square from './Square';
 import GameHeader from './GameHeader';
+import MinMaxAi from './MiniMaxAi';
+import {isAnyPlayerWon} from './GameUtilities';
 
-import {isAnyPlayerWon, findNextTurn} from './GameUtilities';
-
-const defaultState = {
+const defaultState = (fieldSize) => ({
   isXTurn: true,
   playedSquares: [],
   isGameOver: false,
   wonSquares: [],
   winnerName: '',
-};
+  minMaxAi: new MinMaxAi(fieldSize),
+});
 
 const Game = function ({route}) {
   const {playerOneName, playerTwoName, fieldSize, isAgainstAi} = route.params;
-  const deviceWidth = Dimensions.get('window').width;
 
-  const [state, setState] = React.useState(defaultState);
+  const [state, setState] = React.useState(defaultState(fieldSize));
 
   const toggleTurnChar = (squareId) => {
     let newPlayedSquares = [
@@ -35,7 +35,7 @@ const Game = function ({route}) {
     let isGameOver =
       isPlayerWon || newPlayedSquares.length === fieldSize * fieldSize;
 
-    if (!isAgainstAi)
+    if (!isAgainstAi) {
       setState({
         ...state,
         isXTurn: !state.isXTurn,
@@ -44,9 +44,11 @@ const Game = function ({route}) {
         wonSquares: isPlayerWon || [],
         winnerName,
       });
-    else {
+    } else {
+      console.log(state.minMaxAi.getNextAiTurn(newPlayedSquares));
+
       if (!isGameOver) {
-        const nextTurn = findNextTurn(newPlayedSquares, fieldSize);
+        const nextTurn = state.minMaxAi.getNextAiTurn(newPlayedSquares);
         newPlayedSquares = [...newPlayedSquares, [...nextTurn, 'O']];
 
         isPlayerWon = isAnyPlayerWon(newPlayedSquares, fieldSize);
@@ -68,13 +70,14 @@ const Game = function ({route}) {
   };
 
   const restartGame = () => {
-    setState(defaultState);
+    setState(defaultState(fieldSize));
   };
 
   const getDisplayedChar = (i, j) =>
     state.playedSquares.find((s) => s[0] === i && s[1] === j)
       ? state.playedSquares.find((s) => s[0] === i && s[1] === j)[2]
       : '';
+
   const isWonSquare = (i, j) =>
     state.wonSquares.some((e) => e[0] === i && e[1] === j);
 
@@ -106,7 +109,7 @@ const Game = function ({route}) {
         ))}
       </View>
       <BannerAd
-        unitId={__DEV__ ? TestIds.BANNER : gameBannerId}
+        unitId={__DEV__ ? TestIds.BANNER : _gameBannerId}
         size={BannerAdSize.SMART_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
