@@ -7,7 +7,7 @@ import {
   Text,
 } from 'react-native';
 import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
-import {homeBannerId} from '../Ads';
+import {_homeBannerId} from '../Constants';
 import GameConfiguration from './GameConfiguration';
 import HomeScreenMusic from './HomeScreenMusic';
 import HomeHeader from './HomeHeader';
@@ -16,6 +16,7 @@ const Home = function ({navigation}) {
   const [state, setState] = useState({
     isAgainstAi: true,
     isThreeByThree: true,
+    isAiBasicLevel: true,
     isNewGamePressed: false,
     isNewGameSoundPaused: true,
     isPlayerConfigSoundPaused: true,
@@ -125,21 +126,29 @@ const Home = function ({navigation}) {
         </TouchableHighlight>
         <View style={styles.configurationContainerView}>
           <GameConfiguration
-            isFirstOptionSelected={state.isAgainstAi}
-            toggleOption={togglePlayerSetting}
-            optionOne="AI"
-            optionTwo="2 Players"
-          />
-          <GameConfiguration
             isFirstOptionSelected={state.isThreeByThree}
             toggleOption={toggleFieldSize}
             optionOne="3X3"
             optionTwo="4X4"
           />
+          <GameConfiguration
+            isFirstOptionSelected={state.isAgainstAi}
+            toggleOption={togglePlayerSetting}
+            optionOne="AI"
+            optionTwo="2 Players"
+          />
+          {!state.isAgainstAi || (
+            <GameConfiguration
+              isFirstOptionSelected={state.isAiBasicLevel}
+              toggleOption={toggleFieldSize}
+              optionOne="Basic"
+              optionTwo="Advanced"
+            />
+          )}
         </View>
       </View>
       <BannerAd
-        unitId={__DEV__ ? TestIds.BANNER : homeBannerId}
+        unitId={__DEV__ ? TestIds.BANNER : _homeBannerId}
         size={BannerAdSize.SMART_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,

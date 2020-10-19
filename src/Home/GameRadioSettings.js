@@ -38,6 +38,8 @@ const GameRadioSettings = function ({
       <Text style={styles.titleText}>{title}</Text>
       <View style={styles.radioView}>
         <TouchableHighlight
+          underlayColor="#000"
+          activeOpacity={0.5}
           style={
             isFirstOptionSelected
               ? [styles.configurationOption, styles.purpleBackground]
@@ -47,6 +49,8 @@ const GameRadioSettings = function ({
           <Text style={styles.configurationOptionText}>On</Text>
         </TouchableHighlight>
         <TouchableHighlight
+          underlayColor="#fff"
+          activeOpacity={0.5}
           style={
             !isFirstOptionSelected
               ? [styles.configurationOption, styles.purpleBackground]

@@ -9,11 +9,9 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCog, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
+import {_contentRightsUrl} from '../Constants';
 import GameRadioSettings from './GameRadioSettings';
 import AppContext from '../AppContext';
-
-const contentRightsUrl =
-  'https://sites.google.com/view/tictactoemin/content-rights';
 
 const HomeHeader = function ({
   playSettingsButtonSound,
@@ -35,11 +33,11 @@ const HomeHeader = function ({
   } = userContext;
 
   const showContentRights = () => {
-    Linking.canOpenURL(contentRightsUrl).then((supported) => {
+    Linking.canOpenURL(_contentRightsUrl).then((supported) => {
       if (supported) {
-        Linking.openURL(contentRightsUrl);
+        Linking.openURL(_contentRightsUrl);
       } else {
-        console.log("Don't know how to open URI: " + contentRightsUrl);
+        console.log("Don't know how to open URI: " + _contentRightsUrl);
       }
     });
   };
