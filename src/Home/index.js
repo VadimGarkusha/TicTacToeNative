@@ -1,16 +1,11 @@
 import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  TouchableHighlight,
-  Text,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
 import {_homeBannerId} from '../Constants';
-import GameConfiguration from './GameConfiguration';
+import NewGameSettings from './NewGameSettings';
 import HomeScreenMusic from './HomeScreenMusic';
 import HomeHeader from './HomeHeader';
+import MainButton from '../components/MainButton';
 
 const Home = function ({navigation}) {
   const [state, setState] = useState({
@@ -19,8 +14,6 @@ const Home = function ({navigation}) {
     isAiBasicLevel: true,
     isNewGamePressed: false,
     isNewGameSoundPaused: true,
-    isPlayerConfigSoundPaused: true,
-    isFieldConfigSoundPaused: true,
     isSettingsButtonSoundPaused: true,
     isHeaderCloseButtonPaused: true,
   });
@@ -29,7 +22,6 @@ const Home = function ({navigation}) {
     setState({
       ...state,
       isAgainstAi: !state.isAgainstAi,
-      isPlayerConfigSoundPaused: false,
     });
   };
 
@@ -37,12 +29,7 @@ const Home = function ({navigation}) {
     setState({
       ...state,
       isThreeByThree: !state.isThreeByThree,
-      isFieldConfigSoundPaused: false,
     });
-  };
-
-  const toggleNewGameIsPressed = (isNewGamePressed) => {
-    setState({...state, isNewGamePressed});
   };
 
   const navigateToGame = () => {
@@ -60,14 +47,6 @@ const Home = function ({navigation}) {
 
   const resetNewGameSound = () => {
     setState({...state, isNewGameSoundPaused: true});
-  };
-
-  const resetPlayerConfigSound = () => {
-    setState({...state, isPlayerConfigSoundPaused: true});
-  };
-
-  const resetFieldConfigSound = () => {
-    setState({...state, isFieldConfigSoundPaused: true});
   };
 
   const resetSettingsButtonSound = () => {
@@ -91,10 +70,6 @@ const Home = function ({navigation}) {
       <HomeScreenMusic
         isNewGameSoundPaused={state.isNewGameSoundPaused}
         resetNewGameSound={resetNewGameSound}
-        isPlayerConfigSoundPaused={state.isPlayerConfigSoundPaused}
-        resetPlayerConfigSound={resetPlayerConfigSound}
-        isFieldConfigSoundPaused={state.isFieldConfigSoundPaused}
-        resetFieldConfigSound={resetFieldConfigSound}
         isSettingsButtonSoundPaused={state.isSettingsButtonSoundPaused}
         resetSettingsButtonSound={resetSettingsButtonSound}
         isHeaderCloseButtonPaused={state.isHeaderCloseButtonPaused}
@@ -105,47 +80,14 @@ const Home = function ({navigation}) {
         playHeaderCloseButtonSound={playHeaderCloseButtonSound}
       />
       <View style={styles.newGameArea}>
-        <TouchableHighlight
-          style={
-            state.isNewGamePressed
-              ? [styles.newGameButton, styles.pressedButtonText]
-              : styles.newGameButton
-          }
-          underlayColor="#fff"
-          onHideUnderlay={() => toggleNewGameIsPressed(false)}
-          onShowUnderlay={() => toggleNewGameIsPressed(true)}
-          onPress={navigateToGame}>
-          <Text
-            style={
-              state.isNewGamePressed
-                ? [styles.newGameText, styles.pressedButtonText]
-                : styles.newGameText
-            }>
-            New Game
-          </Text>
-        </TouchableHighlight>
-        <View style={styles.configurationContainerView}>
-          <GameConfiguration
-            isFirstOptionSelected={state.isThreeByThree}
-            toggleOption={toggleFieldSize}
-            optionOne="3X3"
-            optionTwo="4X4"
-          />
-          <GameConfiguration
-            isFirstOptionSelected={state.isAgainstAi}
-            toggleOption={togglePlayerSetting}
-            optionOne="AI"
-            optionTwo="2 Players"
-          />
-          {!state.isAgainstAi || (
-            <GameConfiguration
-              isFirstOptionSelected={state.isAiBasicLevel}
-              toggleOption={toggleFieldSize}
-              optionOne="Basic"
-              optionTwo="Advanced"
-            />
-          )}
-        </View>
+        <MainButton text="New Game" onClick={navigateToGame} />
+        <NewGameSettings
+          isThreeByThree={state.isThreeByThree}
+          isAgainstAi={state.isAgainstAi}
+          isAiBasicLevel={state.isAiBasicLevel}
+          toggleFieldSize={toggleFieldSize}
+          togglePlayerSetting={togglePlayerSetting}
+        />
       </View>
       <BannerAd
         unitId={__DEV__ ? TestIds.BANNER : _homeBannerId}
@@ -167,27 +109,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#D1DF2C',
   },
   newGameArea: {
-    marginHorizontal: 10,
+    paddingHorizontal: '5%',
     flex: 1,
     flexWrap: 'wrap',
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
     marginBottom: '20%',
-  },
-  newGameButton: {
-    width: '90%',
-    borderColor: '#fff',
-    borderWidth: 2,
-    paddingVertical: 10,
-  },
-  pressedButtonText: {
-    color: '#D1DF2C',
-  },
-  newGameText: {
-    color: '#fff',
-    fontSize: 30,
-    textAlign: 'center',
+    width: '100%',
   },
   configurationContainerView: {
     flexDirection: 'column',

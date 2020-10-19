@@ -12,6 +12,7 @@ import {faCog, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import {_contentRightsUrl} from '../Constants';
 import GameRadioSettings from './GameRadioSettings';
 import AppContext from '../AppContext';
+import MainButton from '../components/MainButton';
 
 const HomeHeader = function ({
   playSettingsButtonSound,
@@ -77,14 +78,13 @@ const HomeHeader = function ({
               onPress={showContentRights}>
               <Text style={styles.contentRightsText}>Content Rights</Text>
             </TouchableHighlight>
-            <TouchableHighlight
-              style={styles.closeTouchable}
-              onPress={() => {
+            <MainButton
+              text="Close"
+              onClick={() => {
                 playHeaderCloseButtonSound();
                 setModalVisible(!modalVisible);
-              }}>
-              <Text style={styles.closeText}>Close</Text>
-            </TouchableHighlight>
+              }}
+            />
           </View>
         </View>
       </Modal>
@@ -128,23 +128,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 30,
+    marginBottom: 40,
   },
   contentRightsText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 18,
     textDecorationLine: 'underline',
-  },
-  closeTouchable: {
-    marginTop: 40,
-    borderColor: '#fff',
-    borderWidth: 2,
-    paddingVertical: 10,
-  },
-  closeText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 24,
   },
 });
 
