@@ -2,13 +2,15 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {_homeBannerId} from '../Constants';
 import DoubleRadioButtons from '../components/DoubleRadioButtons';
+import MultipleRadioButtons from '../components/MultipleRadioButtons';
 
 const NewGameSettings = function ({
   isThreeByThree,
   isAgainstAi,
-  isAiBasicLevel,
+  aiDifficulty,
   toggleFieldSize,
   togglePlayerSetting,
+  toggleDifficulty,
 }) {
   return (
     <View style={styles.configurationContainerView}>
@@ -27,12 +29,13 @@ const NewGameSettings = function ({
         viewStyles={styles.radioButtonsView}
       />
       {!isAgainstAi || (
-        <DoubleRadioButtons
-          isFirstOptionSelected={isAiBasicLevel}
-          toggleOption={toggleFieldSize}
-          optionOne="Basic"
-          optionTwo="Advanced"
+        <MultipleRadioButtons
+          optionOne="Easy"
+          optionTwo="Medium"
+          optionThree="Hard"
+          selectedOption={aiDifficulty}
           viewStyles={styles.radioButtonsView}
+          selectOption={toggleDifficulty}
         />
       )}
     </View>

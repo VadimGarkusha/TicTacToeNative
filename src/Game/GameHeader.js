@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
   playerText: {
     color: '#fff',
     fontSize: 22,
+    fontWeight: '500',
     textAlign: 'center',
   },
   playerCharView: {

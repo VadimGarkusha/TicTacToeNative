@@ -18,7 +18,13 @@ const defaultState = (fieldSize) => ({
 });
 
 const Game = function ({route}) {
-  const {playerOneName, playerTwoName, fieldSize, isAgainstAi} = route.params;
+  const {
+    playerOneName,
+    playerTwoName,
+    fieldSize,
+    isAgainstAi,
+    aiDifficulty,
+  } = route.params;
 
   const [state, setState] = React.useState(defaultState(fieldSize));
 
@@ -49,7 +55,7 @@ const Game = function ({route}) {
       if (!isGameOver) {
         const nextTurn = state.minMaxAi.getNextAiTurn(
           newPlayedSquares,
-          _difficultyLevel.medium,
+          aiDifficulty,
         );
         // console.log(nextTurn);
 

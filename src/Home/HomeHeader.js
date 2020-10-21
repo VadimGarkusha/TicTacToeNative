@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
     marginBottom: 20,
+    fontWeight: '500',
   },
   contentRightsContainer: {
     justifyContent: 'center',

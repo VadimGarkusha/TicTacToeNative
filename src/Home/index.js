@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {TestIds, BannerAd, BannerAdSize} from '@react-native-firebase/admob';
-import {_homeBannerId} from '../Constants';
+import {_homeBannerId, _difficultyLevel} from '../Constants';
 import NewGameSettings from './NewGameSettings';
 import HomeScreenMusic from './HomeScreenMusic';
 import HomeHeader from './HomeHeader';
@@ -16,6 +16,7 @@ const Home = function ({navigation}) {
     isNewGameSoundPaused: true,
     isSettingsButtonSoundPaused: true,
     isHeaderCloseButtonPaused: true,
+    aiDifficulty: 0,
   });
 
   const togglePlayerSetting = () => {
@@ -32,6 +33,13 @@ const Home = function ({navigation}) {
     });
   };
 
+  const toggleDifficulty = (selectedDifficulty) => {
+    setState({
+      ...state,
+      aiDifficulty: selectedDifficulty,
+    });
+  };
+
   const navigateToGame = () => {
     setState({...state, isNewGameSoundPaused: false});
 
@@ -40,6 +48,7 @@ const Home = function ({navigation}) {
       playerTwoName: state.isAgainstAi ? 'AI' : 'Player 2',
       fieldSize: state.isThreeByThree ? 3 : 4,
       isAgainstAi: state.isAgainstAi,
+      aiDifficulty: state.aiDifficulty,
     };
 
     navigation.navigate('Game', configuration);
@@ -84,9 +93,10 @@ const Home = function ({navigation}) {
         <NewGameSettings
           isThreeByThree={state.isThreeByThree}
           isAgainstAi={state.isAgainstAi}
-          isAiBasicLevel={state.isAiBasicLevel}
+          aiDifficulty={state.aiDifficulty}
           toggleFieldSize={toggleFieldSize}
           togglePlayerSetting={togglePlayerSetting}
+          toggleDifficulty={toggleDifficulty}
         />
       </View>
       <BannerAd

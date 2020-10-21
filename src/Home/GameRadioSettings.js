@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     flex: 1,
+    fontWeight: '500',
   },
   radioView: {
     flex: 1,

@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#fff',
     textAlign: 'center',
+    fontWeight: '500',
   },
   purpleBackground: {
     backgroundColor: '#8966E3',
